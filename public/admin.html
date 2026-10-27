@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Painel | Letícia Raquel</title>
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
+
+  <style>
+
+    body {
+      background: #f5f3ef;
+    }
+
+    .admin-header {
+      background: #202020;
+      color: white;
+      padding: 18px 0;
+    }
+
+    .admin-header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-brand img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      background: white;
+      padding: 4px;
+    }
+
+    .admin-brand strong {
+      display: block;
+      letter-spacing: 2px;
+    }
+
+    .admin-brand span {
+      font-size: 9px;
+      color: #d0b274;
+      letter-spacing: 2px;
+    }
+
+    .logout-button {
+      border: 1px solid #777;
+      background: transparent;
+      color: white;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .admin-main {
+      padding: 45px 0 80px;
+    }
+
+    .admin-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .admin-title h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 40px;
+      color: #222;
+      font-weight: 500;
+    }
+
+    .new-property-button {
+      background: #202020;
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e4dfd7;
+      padding: 22px;
+    }
+
+    .stat-card span {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 30px;
+      margin-top: 8px;
+      color: #222;
+    }
+
+    .admin-list {
+      display: grid;
+      gap: 15px;
+    }
+
+    .admin-property {
+      background: white;
+      border: 1px solid #e4dfd7;
+      display: grid;
+      grid-template-columns: 170px 1fr auto;
+      gap: 20px;
+      padding: 15px;
+      align-items: center;
+    }
+
+    .admin-property-image {
+      height: 120px;
+      background: #eee;
+    }
+
+    .admin-property-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .admin-property-info h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 23px;
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 7px;
+    }
+
+    .admin-property-info p {
+      font-size: 13px;
+      color: #888;
+      margin: 4px 0;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 130px;
+    }
+
+    .admin-actions button {
+      border: 1px solid #ddd;
+      background: white;
+      padding: 9px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .admin-actions button:hover {
+      background: #f4f1eb;
+    }
+
+    .status-select {
+      padding: 9px;
+      border: 1px solid #ddd;
+      background: white;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: min(850px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 30px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .modal-header h2 {
+      font-family: "Playfair Display", serif;
+      font-weight: 500;
+      font-size: 32px;
+    }
+
+    .close-modal {
+      border: 0;
+      background: none;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1px solid #ddd;
+      padding: 12px;
+      outline: none;
+      background: #fff;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #b6975a;
+    }
+
+    .photo-preview {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .photo-preview div {
+      height: 90px;
+      position: relative;
+      background: #eee;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-photo {
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      background: rgba(0,0,0,.7);
+      color: white;
+      border: none;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .cancel-button,
+    .save-button {
+      padding: 13px 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cancel-button {
+      background: #eee;
+    }
+
+    .save-button {
+      background: #202020;
+      color: white;
+    }
+
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: #202020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: white;
+      width: min(420px, 100%);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .login-box img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    .login-box h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .login-box p {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .login-box input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #ddd;
+      padding: 0 15px;
+      margin-bottom: 12px;
+    }
+
+    .login-box button {
+      width: 100%;
+      height: 48px;
+      background: #202020;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .login-error {
+      color: #b33;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 800px) {
+
+      .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .admin-property {
+        grid-template-columns: 120px 1fr;
+      }
+
+      .admin-actions {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .admin-title {
+        display: block;
+      }
+
+      .new-property-button {
+        margin-top: 15px;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .admin-property {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-property-image {
+        height: 200px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+
+      .photo-preview {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <!-- LOGIN -->
+
+  <div
+    class="login-screen"
+    id="loginScreen"
+  >
+
+    <div class="login-box">
+
+      <img
+        src="/logo"
+        alt="Logo"
+      >
+
+      <h1>
+        Painel administrativo
+      </h1>
+
+      <p>
+        Corretora Letícia Raquel
+      </p>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Digite sua senha"
+      >
+
+      <button id="loginButton">
+        Entrar
+      </button>
+
+      <div
+        class="login-error"
+        id="loginError"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- HEADER -->
+
+  <header class="admin-header">
+
+    <div class="container admin-header-inner">
+
+      <div class="admin-brand">
+
+        <img
+          src="/logo"
+          alt="Logo"
+        >
+
+        <div>
+          <strong>
+            LETÍCIA RAQUEL
+          </strong>
+
+          <span>
+            PAINEL ADMINISTRATIVO
+          </span>
+        </div>
+
+      </div>
+
+
+      <button
+        class="logout-button"
+        id="logoutButton"
+      >
+        Sair
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <main class="admin-main">
+
+    <div class="container">
+
+      <div class="admin-title">
+
+        <div>
+
+          <span class="section-label">
+            ADMINISTRAÇÃO
+          </span>
+
+          <h1>
+            Meus imóveis
+          </h1>
+
+        </div>
+
+        <button
+          class="new-property-button"
+          id="newPropertyButton"
+        >
+          + Novo imóvel
+        </button>
+
+      </div>
+
+
+      <section class="dashboard">
+
+        <div class="stat-card">
+          <span>Total</span>
+          <strong id="totalCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Disponíveis</span>
+          <strong id="availableCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Vendidos</span>
+          <strong id="soldCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Alugados</span>
+          <strong id="rentedCount">0</strong>
+        </div>
+
+      </section>
+
+
+      <div
+        class="admin-list"
+        id="adminList"
+      ></div>
+
+    </div>
+
+  </main>
+
+
+  <!-- MODAL -->
+
+  <div
+    class="modal"
+    id="propertyModal"
+  >
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h2 id="modalTitle">
+          Novo imóvel
+        </h2>
+
+        <button
+          class="close-modal"
+          id="closeModal"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form id="propertyForm">
+
+        <input
+          type="hidden"
+          id="propertyId"
+        >
+
+
+        <div class="form-grid">
+
+          <div class="form-group full">
+
+            <label>
+              Título do imóvel
+            </label>
+
+            <input
+              type="text"
+              id="titulo"
+              required
+              placeholder="Ex.: Apartamento moderno no Bessa"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Finalidade
+            </label>
+
+            <select id="finalidade">
+
+              <option value="Venda">
+                Venda
+              </option>
+
+              <option value="Aluguel">
+                Aluguel
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Tipo
+            </label>
+
+            <select id="tipo">
+
+              <option value="Apartamento">
+                Apartamento
+              </option>
+
+              <option value="Casa">
+                Casa
+              </option>
+
+              <option value="Terreno">
+                Terreno
+              </option>
+
+              <option value="Comercial">
+                Comercial
+              </option>
+
+              <option value="Condomínio">
+                Condomínio
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Preço
+            </label>
+
+            <input
+              type="text"
+              id="preco"
+              placeholder="Ex.: R$ 450.000"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Área
+            </label>
+
+            <input
+              type="text"
+              id="area"
+              placeholder="Ex.: 85"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Quartos
+            </label>
+
+            <input
+              type="number"
+              id="quartos"
+              min="0"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Banheiros
+            </label>
+
+            <input
+              type="number"
+              id="banheiros"
+              min="0"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Vagas
+            </label>
+
+            <input
+              type="number"
+              id="vagas"
+              min="0"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Cidade
+            </label>
+
+            <input
+              type="text"
+              id="cidade"
+              placeholder="João Pessoa"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Bairro
+            </label>
+
+            <input
+              type="text"
+              id="bairro"
+              placeholder="Ex.: Bessa"
+            >
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>
+              Endereço
+            </label>
+
+            <input
+              type="text"
+              id="endereco"
+              placeholder="Rua, número..."
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Status
+            </label>
+
+            <select id="status">
+
+              <option value="Disponível">
+                Disponível
+              </option>
+
+              <option value="Vendido">
+                Vendido
+              </option>
+
+              <option value="Alugado">
+                Alugado
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Destaque
+            </label>
+
+            <select id="destaque">
+
+              <option value="false">
+                Não
+              </option>
+
+              <option value="true">
+                Sim
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>
+              Descrição
+            </label>
+
+            <textarea
+              id="descricao"
+              placeholder="Descreva o imóvel..."
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>
+              Fotos do imóvel
+            </label>
+
+            <input
+              type="file"
+              id="fotos"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+            >
+
+            <small>
+              Você pode selecionar várias fotos de uma vez.
+            </small>
+
+            <div
+              class="photo-preview"
+              id="photoPreview"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="cancel-button"
+            id="cancelButton"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="save-button"
+          >
+            Salvar imóvel
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    let imoveis = [];
+    let editandoId = null;
+
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const loginError =
+      document.getElementById("loginError");
+
+
+    function verificarLogin() {
+
+      if (
+        sessionStorage.getItem("adminLogado") === "true"
+      ) {
+
+        loginScreen.style.display = "none";
+
+        carregarImoveis();
+
+      }
+
+    }
+
+
+    loginButton.addEventListener(
+      "click",
+      async () => {
+
+        const password =
+          document.getElementById("password").value;
+
+
+        try {
+
+          const resposta = await fetch(
+            "/api/login",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                password
+              })
+            }
+          );
+
+
+          const resultado =
+            await resposta.json();
+
+
+          if (resultado.sucesso) {
+
+            sessionStorage.setItem(
+              "adminLogado",
+              "true"
+            );
+
+            loginScreen.style.display =
+              "none";
+
+            carregarImoveis();
+
+          } else {
+
+            loginError.textContent =
+              resultado.mensagem;
+
+          }
+
+        } catch (error) {
+
+          loginError.textContent =
+            "Não foi possível conectar ao servidor.";
+
+        }
+
+      }
+    );
+
+
+    document
+      .getElementById("password")
+      .addEventListener("keyup", event => {
+
+        if (event.key === "Enter") {
+          loginButton.click();
+        }
+
+      });
+
+
+    document
+      .getElementById("logoutButton")
+      .addEventListener("click", () => {
+
+        sessionStorage.removeItem(
+          "adminLogado"
+        );
+
+        location.reload();
+
+      });
+
+
+    async function carregarImoveis() {
+
+      const resposta =
+        await fetch("/api/imoveis");
+
+      imoveis =
+        await resposta.json();
+
+      renderizarLista();
+
+    }
+
+
+    function renderizarLista() {
+
+      const lista =
+        document.getElementById("adminList");
+
+      lista.innerHTML = "";
+
+
+      document.getElementById("totalCount").textContent =
+        imoveis.length;
+
+
+      document.getElementById("availableCount").textContent =
+        imoveis.filter(
+          item => item.status === "Disponível"
+        ).length;
+
+
+      document.getElementById("soldCount").textContent =
+        imoveis.filter(
+          item => item.status === "Vendido"
+        ).length;
+
+
+      document.getElementById("rentedCount").textContent =
+        imoveis.filter(
+          item => item.status === "Alugado"
+        ).length;
+
+
+      if (!imoveis.length) {
+
+        lista.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">⌂</div>
+
+            <h3>
+              Você ainda não cadastrou imóveis
+            </h3>
+
+            <p>
+              Clique em "+ Novo imóvel" para começar.
+            </p>
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      imoveis.forEach(imovel => {
+
+        const div =
+          document.createElement("div");
+
+        div.className =
+          "admin-property";
+
+
+        const foto =
+          imovel.fotos &&
+          imovel.fotos.length
+            ? imovel.fotos[0]
+            : "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=600&q=80";
+
+
+        div.innerHTML = `
+
+          <div class="admin-property-image">
+
+            <img
+              src="${foto}"
+              alt=""
+            >
+
+          </div>
+
+
+          <div class="admin-property-info">
+
+            <h3>
+              ${escapar(imovel.titulo)}
+            </h3>
+
+            <p>
+              ${escapar(imovel.tipo)}
+              •
+              ${escapar(imovel.finalidade)}
+            </p>
+
+            <p>
+              ${escapar(
+                [imovel.bairro, imovel.cidade]
+                  .filter(Boolean)
+                  .join(" • ")
+              )}
+            </p>
+
+            <p>
+              ${imovel.preco
+                ? escapar(imovel.preco)
+                : "Preço não informado"}
+            </p>
+
+          </div>
+
+
+          <div class="admin-actions">
+
+            <select
+              class="status-select"
+              onchange="alterarStatus('${imovel.id}', this.value)"
+            >
+
+              <option
+                value="Disponível"
+                ${imovel.status === "Disponível" ? "selected" : ""}
+              >
+                Disponível
+              </option>
+
+              <option
+                value="Vendido"
+                ${imovel.status === "Vendido" ? "selected" : ""}
+              >
+                Vendido
+              </option>
+
+              <option
+                value="Alugado"
+                ${imovel.status === "Alugado" ? "selected" : ""}
+              >
+                Alugado
+              </option>
+
+            </select>
+
+
+            <button
+              onclick="editarImovel('${imovel.id}')"
+            >
+              ✏️ Editar
+            </button>
+
+
+            <button
+              onclick="excluirImovel('${imovel.id}')"
+            >
+              🗑️ Excluir
+            </button>
+
+          </div>
+
+        `;
+
+
+        lista.appendChild(div);
+
+      });
+
+    }
+
+
+    function abrirModal() {
+
+      document
+        .getElementById("propertyModal")
+        .classList.add("active");
+
+    }
+
+
+    function fecharModal() {
+
+      document
+        .getElementById("propertyModal")
+        .classList.remove("active");
+
+      document
+        .getElementById("propertyForm")
+        .reset();
+
+      document
+        .getElementById("propertyId")
+        .value = "";
+
+      document
+        .getElementById("photoPreview")
+        .innerHTML = "";
+
+      editandoId = null;
+
+      document
+        .getElementById("modalTitle")
+        .textContent = "Novo imóvel";
+
+    }
+
+
+    document
+      .getElementById("newPropertyButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          fecharModal();
+
+          abrirModal();
+
+        }
+      );
+
+
+    document
+      .getElementById("closeModal")
+      .addEventListener(
+        "click",
+        fecharModal
+      );
+
+
+    document
+      .getElementById("cancelButton")
+      .addEventListener(
+        "click",
+        fecharModal
+      );
+
+
+    document
+      .getElementById("fotos")
+      .addEventListener(
+        "change",
+        mostrarPreviews
+      );
+
+
+    function mostrarPreviews(event) {
+
+      const preview =
+        document.getElementById("photoPreview");
+
+      preview.innerHTML = "";
+
+
+      Array.from(event.target.files)
+        .forEach(file => {
+
+          const div =
+            document.createElement("div");
+
+          const img =
+            document.createElement("img");
+
+          img.src =
+            URL.createObjectURL(file);
+
+          div.appendChild(img);
+
+          preview.appendChild(div);
+
+        });
+
+    }
+
+
+    document
+      .getElementById("propertyForm")
+      .addEventListener(
+        "submit",
+        salvarImovel
+      );
+
+
+    async function salvarImovel(event) {
+
+      event.preventDefault();
+
+
+      const form =
+        new FormData();
+
+
+      form.append(
+        "titulo",
+        document.getElementById("titulo").value
+      );
+
+      form.append(
+        "finalidade",
+        document.getElementById("finalidade").value
+      );
+
+      form.append(
+        "tipo",
+        document.getElementById("tipo").value
+      );
+
+      form.append(
+        "preco",
+        document.getElementById("preco").value
+      );
+
+      form.append(
+        "area",
+        document.getElementById("area").value
+      );
+
+      form.append(
+        "quartos",
+        document.getElementById("quartos").value
+      );
+
+      form.append(
+        "banheiros",
+        document.getElementById("banheiros").value
+      );
+
+      form.append(
+        "vagas",
+        document.getElementById("vagas").value
+      );
+
+      form.append(
+        "cidade",
+        document.getElementById("cidade").value
+      );
+
+      form.append(
+        "bairro",
+        document.getElementById("bairro").value
+      );
+
+      form.append(
+        "endereco",
+        document.getElementById("endereco").value
+      );
+
+      form.append(
+        "status",
+        document.getElementById("status").value
+      );
+
+      form.append(
+        "destaque",
+        document.getElementById("destaque").value
+      );
+
+      form.append(
+        "descricao",
+        document.getElementById("descricao").value
+      );
+
+
+      const arquivos =
+        document.getElementById("fotos").files;
+
+
+      for (
+        let i = 0;
+        i < arquivos.length;
+        i++
+      ) {
+
+        form.append(
+          "fotos",
+          arquivos[i]
+        );
+
+      }
+
+
+      const url =
+        editandoId
+          ? `/api/imoveis/${editandoId}`
+          : "/api/imoveis";
+
+
+      const method =
+        editandoId
+          ? "PUT"
+          : "POST";
+
+
+      try {
+
+        const resposta =
+          await fetch(
+            url,
+            {
+              method,
+              body: form
+            }
+          );
+
+
+        const resultado =
+          await resposta.json();
+
+
+        if (!resposta.ok) {
+
+          alert(
+            resultado.mensagem ||
+            "Erro ao salvar imóvel."
+          );
+
+          return;
+
+        }
+
+
+        alert(
+          editandoId
+            ? "Imóvel atualizado com sucesso!"
+            : "Imóvel cadastrado com sucesso!"
+        );
+
+
+        fecharModal();
+
+        carregarImoveis();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Não foi possível salvar o imóvel."
+        );
+
+      }
+
+    }
+
+
+    window.editarImovel =
+      function(id) {
+
+        const imovel =
+          imoveis.find(
+            item => item.id === id
+          );
+
+
+        if (!imovel) return;
+
+
+        editandoId = id;
+
+
+        document
+          .getElementById("modalTitle")
+          .textContent =
+          "Editar imóvel";
+
+
+        document
+          .getElementById("propertyId")
+          .value =
+          imovel.id;
+
+
+        document
+          .getElementById("titulo")
+          .value =
+          imovel.titulo || "";
+
+
+        document
+          .getElementById("finalidade")
+          .value =
+          imovel.finalidade || "Venda";
+
+
+        document
+          .getElementById("tipo")
+          .value =
+          imovel.tipo || "Apartamento";
+
+
+        document
+          .getElementById("preco")
+          .value =
+          imovel.preco || "";
+
+
+        document
+          .getElementById("area")
+          .value =
+          imovel.area || "";
+
+
+        document
+          .getElementById("quartos")
+          .value =
+          imovel.quartos || "";
+
+
+        document
+          .getElementById("banheiros")
+          .value =
+          imovel.banheiros || "";
+
+
+        document
+          .getElementById("vagas")
+          .value =
+          imovel.vagas || "";
+
+
+        document
+          .getElementById("cidade")
+          .value =
+          imovel.cidade || "";
+
+
+        document
+          .getElementById("bairro")
+          .value =
+          imovel.bairro || "";
+
+
+        document
+          .getElementById("endereco")
+          .value =
+          imovel.endereco || "";
+
+
+        document
+          .getElementById("status")
+          .value =
+          imovel.status || "Disponível";
+
+
+        document
+          .getElementById("destaque")
+          .value =
+          imovel.destaque
+            ? "true"
+            : "false";
+
+
+        document
+          .getElementById("descricao")
+          .value =
+          imovel.descricao || "";
+
+
+        const preview =
+          document.getElementById(
+            "photoPreview"
+          );
+
+        preview.innerHTML = "";
+
+
+        (imovel.fotos || [])
+          .forEach(foto => {
+
+            const div =
+              document.createElement("div");
+
+            const img =
+              document.createElement("img");
+
+            img.src = foto;
+
+            div.appendChild(img);
+
+            preview.appendChild(div);
+
+          });
+
+
+        abrirModal();
+
+      };
+
+
+    window.alterarStatus =
+      async function(id, status) {
+
+        try {
+
+          const resposta =
+            await fetch(
+              `/api/imoveis/${id}/status`,
+              {
+                method: "PATCH",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                  status
+                })
+              }
+            );
+
+
+          if (!resposta.ok) {
+
+            alert(
+              "Não foi possível alterar o status."
+            );
+
+            return;
+
+          }
+
+
+          carregarImoveis();
+
+        } catch (error) {
+
+          console.error(error);
+
+        }
+
+      };
+
+
+    window.excluirImovel =
+      async function(id) {
+
+        const imovel =
+          imoveis.find(
+            item => item.id === id
+          );
+
+
+        if (!imovel) return;
+
+
+        const confirmar =
+          confirm(
+            `Tem certeza que deseja excluir "${imovel.titulo}"?`
+          );
+
+
+        if (!confirmar) return;
+
+
+        try {
+
+          const resposta =
+            await fetch(
+              `/api/imoveis/${id}`,
+              {
+                method: "DELETE"
+              }
+            );
+
+
+          if (!resposta.ok) {
+
+            alert(
+              "Não foi possível excluir o imóvel."
+            );
+
+            return;
+
+          }
+
+
+          carregarImoveis();
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "Erro ao excluir imóvel."
+          );
+
+        }
+
+      };
+
+
+    function escapar(texto) {
+
+      if (
+        texto === null ||
+        texto === undefined
+      ) {
+        return "";
+      }
+
+      return String(texto)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    verificarLogin();
+
+  </script>
+
+</body>
+
+</html>
